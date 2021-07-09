@@ -11,7 +11,8 @@ class UserService{
         return axios.get(USER_API_BASE_URL + '/' + userId);
     }
     updateUser(user, userId){
-        return axios.put(USER_API_BASE_URL+ '/'+ userId, user);
+        //return axios.put(USER_API_BASE_URL+ '/'+ userId, user);
+        return axios.post(USER_API_BASE_URL+ '/'+ userId, user);
     }
 }
 

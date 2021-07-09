@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileUploadHelper {
 
-	//private final String UPLOAD_DIR = "/home/extramarks/Desktop/decoupledFormHandling/backendFormHandling/src/main/resources/static/image";
-	private final String UPLOAD_DIR = new ClassPathResource("static/image/").getFile().getAbsolutePath();
+	private final String UPLOAD_DIR = "/home/extramarks/Desktop/decoupledFormHandling/backendFormHandling/src/main/resources/static/image";
+	//private final String UPLOAD_DIR = new ClassPathResource("static/image/").getFile().getAbsolutePath();
 	public FileUploadHelper() throws IOException
 	{
 		

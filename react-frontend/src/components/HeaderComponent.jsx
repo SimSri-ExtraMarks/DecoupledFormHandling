@@ -12,7 +12,7 @@ class HeaderComponent extends Component {
             <div>
                 <header>
                     <nav className="navbar navbar-expand-md navbar-dark bg-dark">
-                        <div>User Management App</div>
+                        <div style={{color:"white"}}>User Management App</div>
                     </nav>
                 </header>
             </div>

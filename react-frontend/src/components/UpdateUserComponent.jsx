@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
 import UserService from '../services/UserService';
 
+const initialState={
+    name: "",
+    email: "",
+    mobilenumber: "",
+    state: "",
+    gender: "",
+    skills: [],
+    nameError:"",
+    emailError:"",
+    mobilenumberError:"",
+}
+
+
 class UpdateUserComponent extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            id: this.props.match.params.id,
+        this.state=initialState;
+        /*this.state = {
             name: "",
             email: "",
             mobilenumber: "",
             state: "",
             gender: "",
             skills: [],
-            /*skills: {
-                java: false,
-                springBoot: false,
-                mysql: false,
-                reactjs: false,
-            }*/
-        };
+            nameError:"",
+            emailError:"",
+            mobilenumberError:"",
+            
+        };*/
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeEmailHandler = this.changeEmailHandler.bind(this);
         this.changeMobileNumberHandler = this.changeMobileNumberHandler.bind(this);
@@ -28,7 +39,8 @@ class UpdateUserComponent extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateUser = this.updateUser.bind(this);
     }
-    componentDidMount() {
+    //componentDidMount()
+     componentWillMount(){
         UserService.getUserById(this.state.id).then((res) => {
             let user = res.data;
             this.setState({
@@ -61,13 +73,50 @@ class UpdateUserComponent extends Component {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-
-        this.setState({
-            [name]: value
-        });
+        const index = this.state.skills.indexOf(value);
+        if (index > -1) {
+            this.state.skills.splice(index, 1);
+        }
+        else {
+            this.setState({
+                skills: this.state.skills.concat([value])
+                        });
+        }
     }
+    validate =()=>{
+        let nameError="";
+        let emailError="";
+        let mobilenumberError="";
+        const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+        const validMobile = new RegExp('^([+]\\d{2})?\\d{10}$');
+        /*if(!this.state.email.includes("@")){
+            emailError="invalid email";
+        }
+        if(emailError){
+            this.setState({emailError});
+            return false
+        }
+        return true;
+        */
+        if(!this.state.name){
+            nameError="This field cannot be blank";
+        }
+        if(!validEmail.test(this.state.email)){
+            emailError="Enter email in the format someone@something.domain";
+        }
+        if(!validMobile.test(this.state.mobilenumber)){
+            mobilenumberError="Please enter 10 digit mobile number";
+        }
+        if(emailError || mobilenumberError || nameError){
+            this.setState({emailError, mobilenumberError, nameError});
+            return false
+        }
+        return true;
+    };
+
     updateUser = (e) => {
         e.preventDefault();
+        const isValid = this.validate();
         /*const allskills = Object.keys(this.state.skills)
                 .filter((key) => this.state.skills[key])
                 .join(", ");*/
@@ -81,6 +130,11 @@ class UpdateUserComponent extends Component {
             this.props.history.push('/users');
         });
         /*We are navigating using history of the routes*/
+        if(isValid){
+            UserService.createUser(user).then(res => {
+                this.props.history.push('/users');
+            });
+        }
     }
     cancel() {
         this.props.history.push('/users');
@@ -113,6 +167,9 @@ class UpdateUserComponent extends Component {
                                             value={this.state.name}
                                             onChange={this.changeNameHandler}
                                         />
+                                        <div style={{fontSize:12,color:"red"}}>
+                                            {this.state.nameError}
+                                        </div>
                                     </div>
                                     <div className="form-group">
                                         <label>Email</label>
@@ -123,6 +180,9 @@ class UpdateUserComponent extends Component {
                                             value={this.state.email}
                                             onChange={this.changeEmailHandler}
                                         />
+                                        <div style={{fontSize:12,color:"red"}}>
+                                            {this.state.emailError}
+                                        </div>
                                     </div>
                                     <div className="form-group">
                                         <label>Mobile Number</label>
@@ -133,6 +193,9 @@ class UpdateUserComponent extends Component {
                                             value={this.state.mobilenumber}
                                             onChange={this.changeMobileNumberHandler}
                                         />
+                                        <div style={{fontSize:12,color:"red"}}>
+                                            {this.state.mobilenumberError}
+                                        </div>
                                     </div>
                                     <div className="form-group">
                                         <label>Select State </label>
