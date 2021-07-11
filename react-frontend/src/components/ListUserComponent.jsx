@@ -20,9 +20,6 @@ class ListUserComponent extends Component {
     }
     addUser(){
         this.props.history.push('/add-user');
-        {/*Whenever Add user button is hit, we will be redirected to the above url 
-        By Default in routes, react object maintains history and that history is passed as props. 
-    So we can manually control the history of the browser*/}
     }
     render() {
         return (

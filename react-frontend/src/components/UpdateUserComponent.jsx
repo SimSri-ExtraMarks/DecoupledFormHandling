@@ -1,46 +1,57 @@
 import React, { Component } from 'react';
 import UserService from '../services/UserService';
+import { withRouter } from "react-router"
+import { useParams } from "react-router-dom";
 
-const initialState={
+/*const initialState = {
+
+    //id:this.props.match.params.id,
+    //id:"",
     name: "",
     email: "",
     mobilenumber: "",
     state: "",
     gender: "",
     skills: [],
-    nameError:"",
-    emailError:"",
-    mobilenumberError:"",
-}
+    nameError: "",
+    emailError: "",
+    mobilenumberError: "",
+}*/
 
 
 class UpdateUserComponent extends Component {
     constructor(props) {
+
         super(props);
-        this.state=initialState;
-        /*this.state = {
+        //console.log("props"+JSON.stringify(this.props));
+        //this.setState({id: this.props.match.params.id})
+
+        //        this.state=initialState;
+        this.state = {
+            id: this.props.match.params.id,
             name: "",
             email: "",
             mobilenumber: "",
             state: "",
             gender: "",
             skills: [],
-            nameError:"",
-            emailError:"",
-            mobilenumberError:"",
-            
-        };*/
+            nameError: "",
+            emailError: "",
+            mobilenumberError: "",
+
+        }
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeEmailHandler = this.changeEmailHandler.bind(this);
         this.changeMobileNumberHandler = this.changeMobileNumberHandler.bind(this);
         this.changeStateHandler = this.changeStateHandler.bind(this);
         this.changeGenderHandler = this.changeGenderHandler.bind(this);
-        {/*this.handleClick=this.handleClick.bind(this);*/ }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateUser = this.updateUser.bind(this);
+        console.log("State:" + JSON.stringify(this.state));
     }
-    //componentDidMount()
-     componentWillMount(){
+    componentWillMount() {
+        //const { id } = useParams();
+        //this.setState({id: id});
         UserService.getUserById(this.state.id).then((res) => {
             let user = res.data;
             this.setState({
@@ -80,35 +91,26 @@ class UpdateUserComponent extends Component {
         else {
             this.setState({
                 skills: this.state.skills.concat([value])
-                        });
+            });
         }
     }
-    validate =()=>{
-        let nameError="";
-        let emailError="";
-        let mobilenumberError="";
+    validate = () => {
+        let nameError = "";
+        let emailError = "";
+        let mobilenumberError = "";
         const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
         const validMobile = new RegExp('^([+]\\d{2})?\\d{10}$');
-        /*if(!this.state.email.includes("@")){
-            emailError="invalid email";
+        if (!this.state.name) {
+            nameError = "This field cannot be blank";
         }
-        if(emailError){
-            this.setState({emailError});
-            return false
+        if (!validEmail.test(this.state.email)) {
+            emailError = "Enter email in the format someone@something.domain";
         }
-        return true;
-        */
-        if(!this.state.name){
-            nameError="This field cannot be blank";
+        if (!validMobile.test(this.state.mobilenumber)) {
+            mobilenumberError = "Please enter 10 digit mobile number";
         }
-        if(!validEmail.test(this.state.email)){
-            emailError="Enter email in the format someone@something.domain";
-        }
-        if(!validMobile.test(this.state.mobilenumber)){
-            mobilenumberError="Please enter 10 digit mobile number";
-        }
-        if(emailError || mobilenumberError || nameError){
-            this.setState({emailError, mobilenumberError, nameError});
+        if (emailError || mobilenumberError || nameError) {
+            this.setState({ emailError, mobilenumberError, nameError });
             return false
         }
         return true;
@@ -117,21 +119,13 @@ class UpdateUserComponent extends Component {
     updateUser = (e) => {
         e.preventDefault();
         const isValid = this.validate();
-        /*const allskills = Object.keys(this.state.skills)
-                .filter((key) => this.state.skills[key])
-                .join(", ");*/
         let user = {
             name: this.state.name, email: this.state.email, mobilenumber: this.state.mobilenumber,
-            state: this.state.state, gender: this.state.gender, skills: this.state.skills //skills: this.state.skills
+            state: this.state.state, gender: this.state.gender, skills: this.state.skills
         };
         console.log('user =>' + JSON.stringify(user));
-        /*this then thing is done because axios returns a promise*/
-        UserService.updateUser(user, this.state.id).then(res => {
-            this.props.history.push('/users');
-        });
-        /*We are navigating using history of the routes*/
-        if(isValid){
-            UserService.createUser(user).then(res => {
+        if (isValid) {
+            UserService.updateUser(user, this.state.id).then(res => {
                 this.props.history.push('/users');
             });
         }
@@ -139,15 +133,6 @@ class UpdateUserComponent extends Component {
     cancel() {
         this.props.history.push('/users');
     }
-    /*handleClick = (e) => {
-        const { name, checked } = e.target;
-    
-        this.setState((prevState) => {
-            const skills = prevState.skills;
-            skills[name] = checked;
-            return skills;
-        });
-    };*/
 
     render() {
         return (
@@ -167,7 +152,7 @@ class UpdateUserComponent extends Component {
                                             value={this.state.name}
                                             onChange={this.changeNameHandler}
                                         />
-                                        <div style={{fontSize:12,color:"red"}}>
+                                        <div style={{ fontSize: 12, color: "red" }}>
                                             {this.state.nameError}
                                         </div>
                                     </div>
@@ -180,7 +165,7 @@ class UpdateUserComponent extends Component {
                                             value={this.state.email}
                                             onChange={this.changeEmailHandler}
                                         />
-                                        <div style={{fontSize:12,color:"red"}}>
+                                        <div style={{ fontSize: 12, color: "red" }}>
                                             {this.state.emailError}
                                         </div>
                                     </div>
@@ -193,7 +178,7 @@ class UpdateUserComponent extends Component {
                                             value={this.state.mobilenumber}
                                             onChange={this.changeMobileNumberHandler}
                                         />
-                                        <div style={{fontSize:12,color:"red"}}>
+                                        <div style={{ fontSize: 12, color: "red" }}>
                                             {this.state.mobilenumberError}
                                         </div>
                                     </div>
@@ -232,11 +217,6 @@ class UpdateUserComponent extends Component {
                                         <input name="skills" type="checkbox"
                                             value="ReactJS"
                                             onChange={this.handleInputChange} />ReactJS
-
-                                        { /*<input checked={this.state.skills.java} onChange={this.handleClick} type="checkbox" name="java" /> Java
-                                    <input checked={this.state.skills.springboot} onChange={this.handleClick} type="checkbox" name="springboot" /> SpringBoot
-                                    <input checked={this.state.skills.mysql} onChange={this.handleClick} type="checkbox" name="mysql" /> MySQL
-                                    <input checked={this.state.skills.reactjs} onChange={this.handleClick} type="checkbox" name="reactjs" /> ReactJS*/}
                                     </div>
                                     <button className="btn btn-success" onClick={this.updateUser}>Save</button>
                                     <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{ marginLeft: "10px" }}>Cancel</button>

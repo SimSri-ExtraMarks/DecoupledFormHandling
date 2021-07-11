@@ -19,24 +19,11 @@ class CreateUserComponent extends Component {
     constructor(props) {
         super(props);
         this.state=initialState;
-        /*this.state = {
-            name: "",
-            email: "",
-            mobilenumber: "",
-            state: "",
-            gender: "",
-            skills: [],
-            nameError:"",
-            emailError:"",
-            mobilenumberError:"",
-            
-        };*/
         this.changeNameHandler = this.changeNameHandler.bind(this);
         this.changeEmailHandler = this.changeEmailHandler.bind(this);
         this.changeMobileNumberHandler = this.changeMobileNumberHandler.bind(this);
         this.changeStateHandler = this.changeStateHandler.bind(this);
         this.changeGenderHandler = this.changeGenderHandler.bind(this);
-        {/*this.handleClick=this.handleClick.bind(this);*/ }
         this.handleInputChange = this.handleInputChange.bind(this);
 
         this.saveUser = this.saveUser.bind(this);
@@ -77,15 +64,6 @@ class CreateUserComponent extends Component {
         let mobilenumberError="";
         const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
         const validMobile = new RegExp('^([+]\\d{2})?\\d{10}$');
-        /*if(!this.state.email.includes("@")){
-            emailError="invalid email";
-        }
-        if(emailError){
-            this.setState({emailError});
-            return false
-        }
-        return true;
-        */
         if(!this.state.name){
             nameError="This field cannot be blank";
         }
@@ -106,19 +84,12 @@ class CreateUserComponent extends Component {
     saveUser = (e) => {
         e.preventDefault();
         const isValid = this.validate();
-        /*const allskills = Object.keys(this.state.skills)
-                .filter((key) => this.state.skills[key])
-                .join(", ");*/
         let user = {
             name: this.state.name, email: this.state.email, mobilenumber: this.state.mobilenumber,
-            state: this.state.state, gender: this.state.gender, skills: this.state.skills //skills: this.state.skills
+            state: this.state.state, gender: this.state.gender, skills: this.state.skills 
         };
         console.log('user =>' + JSON.stringify(user));
-        /*this then thing is done because axios returns a promise*/
-        /*UserService.createUser(user).then(res => {
-            this.props.history.push('/users');
-        });
-        We are navigating using history of the routes*/
+        
         if(isValid){
             UserService.createUser(user).then(res => {
                 this.props.history.push('/users');
@@ -213,11 +184,6 @@ class CreateUserComponent extends Component {
                                         <input name="skills" type="checkbox"
                                             value="ReactJS"
                                             onChange={this.handleInputChange} />ReactJS
-
-                                        { /*<input checked={this.state.skills.java} onChange={this.handleClick} type="checkbox" name="java" /> Java
-                                    <input checked={this.state.skills.springboot} onChange={this.handleClick} type="checkbox" name="springboot" /> SpringBoot
-                                    <input checked={this.state.skills.mysql} onChange={this.handleClick} type="checkbox" name="mysql" /> MySQL
-                                    <input checked={this.state.skills.reactjs} onChange={this.handleClick} type="checkbox" name="reactjs" /> ReactJS*/}
                                     </div>
                                     <button className="btn btn-success" onClick={this.saveUser}>Save</button>
                                     <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{ marginLeft: "10px" }}>Cancel</button>
