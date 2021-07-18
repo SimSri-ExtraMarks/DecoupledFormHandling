@@ -23,6 +23,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	
+	public UserController(UserService userService) {
+		
+		this.userService = userService;
+	}
 	//get all users
 	@GetMapping("/users")
 	public List<User> getAllUsers(){
@@ -36,8 +41,7 @@ public class UserController {
 		return userService.saveData(user);
 		//While hitting postman ensure content-type should be application/json
 	}
-	//get user by id rest api
-	//Here, ResponseEntity generic type is used because we are dealing with http responses
+	
 	@GetMapping("/users/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable int id){
 		User user = userService.getDataById(id);
