@@ -19,21 +19,11 @@ public class FileUploadController {
 	@PostMapping("/upload-file")
 	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
 		try {
-			// validation
-			/*
-			 * if(file.isEmpty()) { return
-			 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-			 * body("Request must contain file"); }
-			 * if(!file.getContentType().equals("image/jpeg")) { return
-			 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-			 * body("Only JPEG type images supported"); }
-			 */
 			boolean f = fileUploadHelper.uploadFile(file);
 			if (f) {
-				//Static Path
-				//return ResponseEntity.ok("File Uploaded Successfully");
-	return ResponseEntity.ok(ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(file.getOriginalFilename()).toUriString());		
-			
+				return ResponseEntity.ok(ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/")
+						.path(file.getOriginalFilename()).toUriString());
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

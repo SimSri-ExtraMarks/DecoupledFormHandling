@@ -15,43 +15,40 @@ import org.springframework.web.bind.annotation.RestController;
 import com.formHandling.backend.entity.User;
 import com.formHandling.backend.services.UserService;
 
-
-@CrossOrigin(origins = "http://localhost:3000/")  //Access to backend from frontend was blocked via CORS Policy
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
-	
+
 	public UserController(UserService userService) {
-		
+
 		this.userService = userService;
 	}
-	//get all users
+
+	// get all users
 	@GetMapping("/users")
-	public List<User> getAllUsers(){
+	public List<User> getAllUsers() {
 		return userService.getAllDatas();
 	}
-	//create user api
+
+	// create user api
 	@PostMapping("/users")
 	public User createUser(@RequestBody User user) {
-		//RequestBody: is used because User will return a json type object
-		//to map it to User type(Java type object)
 		return userService.saveData(user);
-		//While hitting postman ensure content-type should be application/json
 	}
-	
+
 	@GetMapping("/users/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable int id){
+	public ResponseEntity<User> getUserById(@PathVariable int id) {
 		User user = userService.getDataById(id);
 		return ResponseEntity.ok(user);
 	}
-	//@PutMapping("/users/{id}")
+
 	@PostMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User userDetails){
+	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User userDetails) {
 		User user = userService.getDataById(id);
-		System.out.println("User inside post" +user);
+		System.out.println("User inside post" + user);
 		user.setName(userDetails.getName());
 		user.setEmail(userDetails.getEmail());
 		user.setMobilenumber(userDetails.getMobilenumber());
@@ -59,9 +56,9 @@ public class UserController {
 		user.setGender(userDetails.getGender());
 		user.setSkills(userDetails.getSkills());
 		User updatedUser = userService.updateData(user);
-		System.out.println("updatedUser" +updatedUser);
+		System.out.println("updatedUser" + updatedUser);
 		return ResponseEntity.ok(updatedUser);
-		
+
 	}
 
 }
